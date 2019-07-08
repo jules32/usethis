@@ -20,3 +20,14 @@ test_that("use_tutorial() creates a tutorial", {
     }
   )
 })
+
+test_that("use_tutorial(learner_friendly = TRUE) adds promised file, Imports learnr", {
+  with_mock(
+    `usethis:::uses_roxygen` = function(base_path) TRUE, {
+      scoped_temporary_package()
+      use_tutorial(name = "aaa", title = "bbb", learner_friendly = TRUE)
+      expect_match(desc::desc_get("Imports", proj_get()), "learnr")
+      expect_proj_file("R", "utils-run-tutorial.R")
+    }
+  )
+})
